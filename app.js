@@ -5,5 +5,5 @@ var content = function(req, res) {
     res.writeHead(200);
 }
 
-var server = http.createServer(content);
-server.listen(8000);
+var app = http.createServer(content);
+module.exports = app;
