@@ -1,9 +1,14 @@
 
-var http = require('http');
-var content = function(req, res) {
-    res.end("Hello World\n");
-    res.writeHead(200);
-}
+const path = require("path");
+const express = require('express');
+const app = express();
+const userRoutes = require("./src/routes/User.route");
 
-var app = http.createServer(content);
-module.exports = app;
+app.set('views', __dirname + '/src/views');
+app.set('view engine', 'html');
+
+app.use(userRoutes);
+
+app.listen(3000, function () {
+    console.log('Server running on port 3000...');
+});
