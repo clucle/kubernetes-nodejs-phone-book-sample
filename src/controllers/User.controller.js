@@ -29,5 +29,21 @@ exports.loginPage = function (req, res) {
 }
 
 exports.doLogin = function (req, res) {
-    console.log("do login");
+    if (!req.body) return;
+    let id = req.body.id;
+    let password = req.body.password;
+
+    if (!id)
+    {
+        res.status(400).send({message: "need id"});
+    }
+    else if (!password)
+    {
+        res.status(400).send({message: "need password"});
+    }
+    else
+    {
+        res.status(200).send();
+    }
+    
 }
