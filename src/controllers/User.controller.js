@@ -44,6 +44,9 @@ exports.doLogin = function (req, res) {
     else
     {
         res.status(200).send();
-    }
-    
+    }   
+}
+
+exports.signupPage = function (req, res) {
+    res.sendFile(path.join(__dirname, "../views", "signup.html"));
 }

@@ -20,7 +20,7 @@
     <div class="container-fluid h-100">
         <div class="row justify-content-center align-items-center h-100">
             <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                <form id="login-form" action="/login" method="post">
+                <form id="signup-form" action="/login" method="post">
                     <div class="form-group">
                         <input name="id" _ngcontent-c0="" class="form-control form-control-lg" placeholder="id"
                             type="text">
@@ -30,26 +30,26 @@
                             type="password">
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-info btn-lg btn-block">Sign In</button>
+                        <button class="btn btn-info btn-lg btn-block">Sign Up</button>
                     </div>
                 </form>
                 <div class="">
-                    <button onclick="window.location='signup';" class="btn btn-info btn-lg btn-block">Go to SignUp Page</button>
+                    <button class="btn btn-info btn-lg btn-block">Go to Login Page</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        $("#login-form").submit(function (event) {
-            const formData = $("#login-form").serialize();
+        $("#signup-form").submit(function( event ) {
+            const formData = $("#signup-form").serialize();
 
             event.preventDefault()
             $.ajax({
-                url: "/login",
+                url: "/signup",
                 type: 'POST',
                 data: formData,
-                error: function (xhr, status) {
+                error: function(xhr, status) {
                     var errorResponse = $.parseJSON(xhr.responseText);
                     alert(errorResponse.message);
                 }
