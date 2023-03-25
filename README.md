@@ -5,26 +5,39 @@
 `minikube`: v1.29.0
 `kubernetes`: v1.26.1
 
-## 도커로 서버 띄우기
+## mongodb 배포
 ```bash
-docker run -d -p 8080:8000 clucle/hello
+# https://github.com/antonputra/tutorials/tree/main/lessons/050
+kubectl apply -f deploy/mongodb/
 ```
 
-## 쿠베네티스로 서버 띄우기
+## mongodb 테스트
 ```bash
-kubectl create -f ./pod.yaml
-kubectl apply -f ./pod.yaml
-kubectl get pod
-
-kubectl create -f ./service.yaml
-kubectl apply -f ./service.yaml
-
-minikube service hello-svc --url
+# 쿠버네티스 내부 포트와 연결해서 외부에서 테스트
+kubectl port-forward svc/mongodb-headless 27017:27017 -n database
+mongosh -u clucle -p secretpassword123 --authenticationDatabase clucle-web
 ```
 
+## 서버 로컬에서 테스트하기
 ```bash
-minikube start --driver=docker
+node server
+```
 
-kubectl delete service <name>
+## 도커로 빌드 후 허브에 푸시
+```bash
+docker build -t clucle/web .
+docker push clucle/web
+```
 
+## server 배포
+```bash
+# 이미지 변경 됐을 시
+kubectl rollout restart -n staging deployment clucle
+
+kubectl apply -f deploy/server/
+```
+
+## server 외부 포트 열기
+```bash
+kubectl port-forward svc/clucle 4000:4000 -n staging
 ```
