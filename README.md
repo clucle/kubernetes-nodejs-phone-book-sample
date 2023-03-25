@@ -21,3 +21,10 @@ kubectl apply -f ./service.yaml
 
 minikube service hello-svc --url
 ```
+
+```bash
+minikube start --driver=docker
+
+kubectl delete service <name>
+
+```

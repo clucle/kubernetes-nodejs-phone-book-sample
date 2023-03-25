@@ -2,7 +2,7 @@ const createError = require('http-errors');
 const mongoose = require('mongoose');
 const path = require("path");
 
-const User = require('../Models/User.model');
+const User = require('../models/User.model');
 
 exports.homePage = async function (req, res) {
     if (req.session && req.session.user) {
