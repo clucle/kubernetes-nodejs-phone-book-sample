@@ -2,9 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-    id:{
-        type:String,
-        required:true,
+    _id: Object,
+    username:{
+        type: String, 
+        unique: true, 
+        required: [true, "can't be blank"],
+        match: [/^[a-zA-Z0-9]+$/, 'is invalid'],
+        index: true
     },
     password:{
         type:String,

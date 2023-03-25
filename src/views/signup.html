@@ -49,6 +49,10 @@
                 url: "/signup",
                 type: 'POST',
                 data: formData,
+                success: function(res) {
+                    alert("sign up success");
+                    window.location = "/";
+                },
                 error: function(xhr, status) {
                     var errorResponse = $.parseJSON(xhr.responseText);
                     alert(errorResponse.message);

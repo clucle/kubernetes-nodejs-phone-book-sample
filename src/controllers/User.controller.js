@@ -67,7 +67,7 @@ exports.doSignup = async function (req, res) {
         return;
     }
 
-    let isExist = await User.findOne({id:id});
+    let isExist = await User.findOne({username:id});
     if (isExist)
     {
         res.status(400).send({message: "already exists id"});
@@ -75,18 +75,19 @@ exports.doSignup = async function (req, res) {
     }
 
     let user = new User({
-        id: id,
+        _id: new mongoose.Types.ObjectId(),
+        username: id,
         password: password
     });
 
-    user.save(function(err) {
+    user.save(function(err, user) {
         if (err) 
         {
             res.status(400).send({message: err});
             return;
         }
 
-        req.session.user = id;
+        // req.session.user = user._id;
         res.redirect("/");
     });
 }

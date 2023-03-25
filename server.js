@@ -11,13 +11,16 @@ app.listen(process.env.PORT, async () => {
     const dbHostName = process.env.MONGODB_HOSTNAME;
     const database = process.env.MONGODB_DATABASE;
 
-    const connectionString = `mongodb://${dbUserName}:${dbPassword}@${dbHostName}:27017/?directConnection=true&serverSelectionTimeoutMS=2000&authSource=${database}&appName=mongosh+1.8.0`;
+    const connectionString = `mongodb://${dbUserName}:${dbPassword}@localhost:27017/?directConnection=true&serverSelectionTimeoutMS=2000&authSource=${database}&appName=mongosh+1.8.0`;
     console.log(connectionString);
 
     mongoose.connect(connectionString, {
-        useNewUrlParser: true
+        useNewUrlParser: true,
+        dbName: database
     }).then(
-        () => console.log(`listen.. ${process.env.PORT}`)
+        () => {
+            console.log(`listen.. ${process.env.PORT}`)
+        }
     ).catch(err => {
         console.error(err);
         process.exit(1);
