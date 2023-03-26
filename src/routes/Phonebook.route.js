@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {getAll, getOne, createOne, updateOne, deleteOne} = require("../controllers/Phonebook.controller");
+const { getAll, getOne, createOne, updateOne, deleteOne } = require("../controllers/Phonebook.controller");
 
 router.get("/phonebook", getAll);
 

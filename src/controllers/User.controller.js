@@ -27,28 +27,24 @@ exports.doLogin = async function (req, res) {
     let id = req.body.id;
     let password = req.body.password;
 
-    if (!id)
-    {
-        res.status(400).send({message: "need id"});
+    if (!id) {
+        res.status(400).send({ message: "need id" });
         return;
     }
-    else if (!password)
-    {
-        res.status(400).send({message: "need password"});
+    else if (!password) {
+        res.status(400).send({ message: "need password" });
         return;
     }
-    
-    let user = await User.findOne({username:id}).select('password');
-    if (!user)
-    {
-        res.status(400).send({message: "there is no id"});
+
+    let user = await User.findOne({ username: id }).select('password');
+    if (!user) {
+        res.status(400).send({ message: "there is no id" });
         return;
     }
 
     const isValid = await user.password == password;
-    if (!isValid)
-    {
-        res.status(400).send({message: "wrong password"});
+    if (!isValid) {
+        res.status(400).send({ message: "wrong password" });
         return;
     }
 
@@ -65,21 +61,18 @@ exports.doSignup = async function (req, res) {
     let id = req.body.id;
     let password = req.body.password;
 
-    if (!id)
-    {
-        res.status(400).send({message: "need id"});
+    if (!id) {
+        res.status(400).send({ message: "need id" });
         return;
     }
-    else if (!password)
-    {
-        res.status(400).send({message: "need password"});
+    else if (!password) {
+        res.status(400).send({ message: "need password" });
         return;
     }
 
-    let isExist = await User.findOne({username:id});
-    if (isExist)
-    {
-        res.status(400).send({message: "already exists id"});
+    let isExist = await User.findOne({ username: id });
+    if (isExist) {
+        res.status(400).send({ message: "already exists id" });
         return;
     }
 
@@ -89,10 +82,9 @@ exports.doSignup = async function (req, res) {
         password: password
     });
 
-    user.save(function(err, user) {
-        if (err) 
-        {
-            res.status(400).send({message: err});
+    user.save(function (err, user) {
+        if (err) {
+            res.status(400).send({ message: err });
             return;
         }
 
