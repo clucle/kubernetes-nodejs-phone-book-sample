@@ -4,6 +4,7 @@ const session = require("express-session");
 const express = require('express');
 const app = express();
 const userRoutes = require("./src/routes/User.route");
+const phonebookRoutes = require("./src/routes/Phonebook.route");
 const Memorystore = require('memorystore')(session)
 
 app.use(express.json());
@@ -23,5 +24,6 @@ app.use(session({
 }))
 
 app.use(userRoutes);
+app.use(phonebookRoutes);
 
 module.exports = app;
