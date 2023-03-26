@@ -6,14 +6,8 @@ const User = require('../models/User.model');
 
 exports.homePage = async function (req, res) {
     if (req.session && req.session.user) {
-        let user = await User.findById(req.session.user);
-
-        /*
-        res.render("pages/home", {
-            name: user.first_name + ' ' + user.last_name,
-            isLoggedIn: true
-        });
-        */
+        // let user = await User.findById(req.session.user);
+        res.sendFile(path.join(__dirname, "../views", "index.html"));
     } else {
         res.redirect("/login");
     }
@@ -28,7 +22,7 @@ exports.loginPage = function (req, res) {
     }
 }
 
-exports.doLogin = function (req, res) {
+exports.doLogin = async function (req, res) {
     if (!req.body) return;
     let id = req.body.id;
     let password = req.body.password;
@@ -36,15 +30,30 @@ exports.doLogin = function (req, res) {
     if (!id)
     {
         res.status(400).send({message: "need id"});
+        return;
     }
     else if (!password)
     {
         res.status(400).send({message: "need password"});
+        return;
     }
-    else
+    
+    let user = await User.findOne({username:id}).select('password');
+    if (!user)
     {
-        res.status(200).send();
-    }   
+        res.status(400).send({message: "there is no id"});
+        return;
+    }
+
+    const isValid = await user.password == password;
+    if (!isValid)
+    {
+        res.status(400).send({message: "wrong password"});
+        return;
+    }
+
+    req.session.user = user._id;
+    res.redirect("/");
 }
 
 exports.signupPage = function (req, res) {
@@ -87,7 +96,6 @@ exports.doSignup = async function (req, res) {
             return;
         }
 
-        // req.session.user = user._id;
         res.redirect("/");
     });
 }
