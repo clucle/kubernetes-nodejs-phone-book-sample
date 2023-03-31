@@ -11,7 +11,7 @@ app.listen(process.env.PORT, async () => {
     const dbHostName = process.env.MONGODB_HOSTNAME;
     const database = process.env.MONGODB_DATABASE;
 
-    const connectionString = `mongodb://${dbUserName}:${dbPassword}@localhost:27017/?directConnection=true&serverSelectionTimeoutMS=2000&authSource=${database}&appName=mongosh+1.8.0`;
+    const connectionString = `mongodb://${dbUserName}:${dbPassword}@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&authSource=${database}&appName=mongosh+1.8.0`;
     console.log(connectionString);
 
     mongoose.connect(connectionString, {
