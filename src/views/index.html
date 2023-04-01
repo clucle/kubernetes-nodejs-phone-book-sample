@@ -61,6 +61,29 @@
             </div>
         </div>
     </div>
+
+    
+    <script>
+        function getAll() {
+            $.ajax({
+                url: "/phonebook",
+                type: 'GET',
+                success: function(res) {
+                    console.log(res);
+                },
+                error: function (xhr, status) {
+                    var errorResponse = $.parseJSON(xhr.responseText);
+                    alert(errorResponse.message);
+                }
+            });
+        }
+
+        function init() {
+            getAll();
+        }
+
+        init();
+    </script>
 </body>
 
 </html>

@@ -6,11 +6,8 @@ const User = require('../models/User.model');
 
 exports.homePage = async function (req, res) {
     res.sendFile(path.join(__dirname, "../views", "index.html"));
-    return;
 
-    // 임시로 index 바로가기
     if (req.session && req.session.user) {
-        // let user = await User.findById(req.session.user);
         res.sendFile(path.join(__dirname, "../views", "index.html"));
     } else {
         res.redirect("/login");

@@ -1,8 +1,16 @@
 const mongoose = require('mongoose');
 const Phonebook = require('../models/Phonebook.model');
 
-exports.getAll = function (req, res) {
-    console.log("getAll");
+exports.getAll = async function (req, res) {
+    let phonebooks = await Phonebook.find({}).select()
+    if (!phonebooks) {
+        res.status(400).send({ message: "something wrong" });
+        return;
+    }
+
+    
+    console.log(phonebooks);
+    res.end(JSON.stringify(Object.assign({}, phonebooks)));
 }
 
 exports.getOne = function (req, res) {
