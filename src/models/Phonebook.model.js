@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 const PhonebookSchema = new Schema({
   _id: Object,
+  uid: {
+    type: Object,
+    required: true
+  },
   name: {
     type: String,
     required: true

@@ -62,18 +62,39 @@
         </div>
     </div>
 
-    
+
     <script>
         function getAll() {
             $.ajax({
                 url: "/phonebook",
                 type: 'GET',
-                success: function(res) {
+                success: function (res) {
                     console.log(res);
                 },
                 error: function (xhr, status) {
                     var errorResponse = $.parseJSON(xhr.responseText);
                     alert(errorResponse.message);
+                }
+            });
+        }
+
+        function addPhonebook(name, phone, email, memo) {
+            $.ajax({
+                url: "/phonebook",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    memo, memo
+                },
+                success: function (res) {
+                    console.log(res);
+                },
+                error: function (xhr, status) {
+                    alert("?");
+                    window.location = "/";
                 }
             });
         }

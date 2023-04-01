@@ -4,13 +4,13 @@ const path = require("path");
 
 const User = require('../models/User.model');
 
-exports.homePage = async function (req, res) {
-    res.sendFile(path.join(__dirname, "../views", "index.html"));
-
+exports.homePage = function (req, res) {
     if (req.session && req.session.user) {
         res.sendFile(path.join(__dirname, "../views", "index.html"));
+        return;
     } else {
         res.redirect("/login");
+        return;
     }
 }
 
