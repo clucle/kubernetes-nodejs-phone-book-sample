@@ -32,8 +32,7 @@
         </div>
         <div class="row justify-content-center align-items-center p-3">
             <div class="col col-sm-8 col-md-8 col-lg-8 col-xl-8" style="text-align: right">
-                <button type="button" class="btn btn-success" data-toggle="modal"
-                    data-target="#modalForm">Add</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalForm">Add</button>
                 <button type="button" class="btn btn-danger">Delete</button>
             </div>
         </div>
@@ -116,7 +115,7 @@
 
     <script>
         function createPhonebookTableRow(phonebook) {
-            let ret = `<tr>
+            let ret = `<tr id=phonebook-${phonebook._id}>
                 <td class="bs-checkbox" style="text-align: center; vertical-align: middle; width: 36px;">
                     <label class="justify-content-center align-items-center m-0">
                         <input data-index="0" name="btSelectItem" type="checkbox" value="0">
@@ -127,7 +126,10 @@
                 <td>${phonebook.phone}</td>
                 <td>${phonebook.email}</td>
                 <td>${phonebook.memo}</td>
-                <td>1</td>
+                <td>
+                    <button type="button" class="btn btn-info">수정</button>
+                    <button type="button" class="btn btn-danger" onclick="deletePhonebook('${phonebook._id}')">삭제</button>
+                </td>
             </tr>`
             return ret;
         }
@@ -184,6 +186,21 @@
                 $('#phonebook-add-email').val(),
                 $('#phonebook-add-memo').val()
             )
+        }
+
+        function deletePhonebook(id) {
+            $.ajax({
+                url: "/phonebook/" + id,
+                type: 'DELETE',
+                success: function (res) {
+                    const id = res.message;
+                    $("#phonebook-" + id).remove();
+                },
+                error: function (xhr, status) {
+                    var errorResponse = $.parseJSON(xhr.responseText);
+                    alert(errorResponse.message);
+                }
+            });
         }
 
         function init() {

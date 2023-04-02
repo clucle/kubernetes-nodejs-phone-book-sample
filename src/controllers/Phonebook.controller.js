@@ -3,13 +3,12 @@ const Phonebook = require('../models/Phonebook.model');
 const User = require('../models/User.model');
 
 exports.getAll = async function (req, res) {
-    let phonebooks = await Phonebook.find({}).select();
+    let phonebooks = await Phonebook.find({ uid: req.session.user }).select();
     if (!phonebooks) {
         res.status(400).send({ message: "something wrong" });
         return;
     }
 
-    console.log(phonebooks);
     res.end(JSON.stringify(Object.assign({}, phonebooks)));
 }
 
@@ -56,8 +55,10 @@ exports.updateOne = function (req, res) {
     console.log(id);
 }
 
-exports.deleteOne = function (req, res) {
-    console.log("deleteOne");
+exports.deleteOne = async function (req, res) {
     const { id } = req.params;
+    await Phonebook.findOneAndDelete({ uid: req.session.user, _id: mongoose.Types.ObjectId(id) });
+
     console.log(id);
+    res.status(200).send({ message: id });
 }
