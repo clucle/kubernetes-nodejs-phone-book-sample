@@ -50,15 +50,17 @@ exports.createOne = async function (req, res) {
 }
 
 exports.updateOne = function (req, res) {
-    console.log("updateOne");
+    if (!req.body) return;
+    
     const { id } = req.params;
-    console.log(id);
+    const { name, phone, email, memo } = req.body;
+
+    res.status(200).send({ message: id });
 }
 
 exports.deleteOne = async function (req, res) {
     const { id } = req.params;
     await Phonebook.findOneAndDelete({ uid: req.session.user, _id: mongoose.Types.ObjectId(id) });
 
-    console.log(id);
     res.status(200).send({ message: id });
 }

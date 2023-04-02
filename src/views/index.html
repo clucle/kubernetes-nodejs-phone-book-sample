@@ -32,7 +32,7 @@
         </div>
         <div class="row justify-content-center align-items-center p-3">
             <div class="col col-sm-8 col-md-8 col-lg-8 col-xl-8" style="text-align: right">
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalForm">Add</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-add">Add</button>
                 <button type="button" class="btn btn-danger">Delete</button>
             </div>
         </div>
@@ -67,12 +67,12 @@
     </div>
 
     <!-- https://mdbootstrap.com/docs/b4/jquery/modals/forms/ -->
-    <div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header text-center">
-                    <h4 class="modal-title w-100 font-weight-bold">Add Phonebook</h4>
+                    <h4 class="modal-title w-100 font-weight-bold">전화번호부 등록</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -105,13 +105,59 @@
 
                 </div>
                 <div class="modal-footer d-flex justify-content-center">
-                    <button class="btn btn-unique" onclick="addButtonClicked()">Add <i
+                    <button class="btn btn-unique" onclick="addButtonClicked()">추가 <i
                             class="fas fa-paper-plane-o ml-1"></i></button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- https://mdbootstrap.com/docs/b4/jquery/modals/forms/ -->
+    <div class="modal fade" id="modal-modify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">전화번호부 추가</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-3">
+                    <input type="hidden" id="phonebook-modify-id" value="">
+                    <div class="md-form mb-5">
+                        <i class="fas fa-user prefix grey-text"></i>
+                        <label data-error="wrong" data-success="right" for="form34">name</label>
+                        <input type="text" id="phonebook-modify-name" class="form-control validate">
+                    </div>
+
+                    <div class="md-form mb-5">
+                        <i class="fas fa-envelope prefix grey-text"></i>
+                        <label data-error="wrong" data-success="right" for="form29">phone</label>
+                        <input type="text" id="phonebook-modify-phone" class="form-control validate">
+                    </div>
+
+                    <div class="md-form mb-5">
+                        <i class="fas fa-tag prefix grey-text"></i>
+                        <label data-error="wrong" data-success="right" for="form32">email</label>
+                        <input type="email" id="phonebook-modify-email" class="form-control validate">
+                    </div>
+
+                    <div class="md-form">
+                        <i class="fas fa-pencil prefix grey-text"></i>
+                        <label data-error="wrong" data-success="right" for="form8">memo</label>
+                        <textarea type="text" id="phonebook-modify-memo" class="md-textarea form-control"
+                            rows="4"></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button class="btn btn-unique" onclick="modifyButtonClicked()">수정 <i
+                            class="fas fa-paper-plane-o ml-1"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function createPhonebookTableRow(phonebook) {
@@ -127,7 +173,7 @@
                 <td>${phonebook.email}</td>
                 <td>${phonebook.memo}</td>
                 <td>
-                    <button type="button" class="btn btn-info">수정</button>
+                    <button type="button" class="btn btn-info" onclick="openModifyModal('${phonebook._id}', '${phonebook.name}', '${phonebook.phone}', '${phonebook.email}', '${phonebook.memo}')">수정</button>
                     <button type="button" class="btn btn-danger" onclick="deletePhonebook('${phonebook._id}')">삭제</button>
                 </td>
             </tr>`
@@ -170,7 +216,7 @@
                 success: function (res) {
                     const row = createPhonebookTableRow(res.message);
                     $("#phonebook-table").append(row);
-                    $("#modalForm").modal("hide");
+                    $("#modal-add").modal("hide");
                 },
                 error: function (xhr, status) {
                     var errorResponse = $.parseJSON(xhr.responseText);
@@ -185,7 +231,7 @@
                 $('#phonebook-add-phone').val(),
                 $('#phonebook-add-email').val(),
                 $('#phonebook-add-memo').val()
-            )
+            );
         }
 
         function deletePhonebook(id) {
@@ -203,9 +249,49 @@
             });
         }
 
+        function openModifyModal(id, name, phone, email, memo) {
+            $('#phonebook-modify-id').val(id);
+            $('#phonebook-modify-name').val(name);
+            $('#phonebook-modify-phone').val(phone);
+            $('#phonebook-modify-email').val(email);
+            $('#phonebook-modify-memo').val(memo);
+            $('#modal-modify').modal('show');
+        }
+
+        function modifyButtonClicked() {
+            modifyPhonebook(
+                $('#phonebook-modify-id').val(),
+                $('#phonebook-modify-name').val(),
+                $('#phonebook-modify-phone').val(),
+                $('#phonebook-modify-email').val(),
+                $('#phonebook-modify-memo').val());
+        }
+
+        function modifyPhonebook(id, name, phone, email, memo) {
+            console.log(id, name, phone, email, memo);
+            $.ajax({
+                url: "/phonebook/" + id,
+                type: 'PUT',
+                dataType: 'json',
+                data: {
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    memo, memo
+                },
+                success: function (res) {
+                    console.log(res);
+                },
+                error: function (xhr, status) {
+                    var errorResponse = $.parseJSON(xhr.responseText);
+                    alert(errorResponse.message);
+                }
+            });
+        }
+
         function init() {
             $(document).ready(function () {
-                $("#modalForm").on('show.bs.modal', function (e) {
+                $("#modal-add").on('show.bs.modal', function (e) {
                     $('#phonebook-add-name').val("");
                     $('#phonebook-add-phone').val("");
                     $('#phonebook-add-email').val("");

@@ -25,8 +25,7 @@ exports.loginPage = function (req, res) {
 
 exports.doLogin = async function (req, res) {
     if (!req.body) return;
-    let id = req.body.id;
-    let password = req.body.password;
+    const { id, password } = req.body;
 
     if (!id) {
         res.status(400).send({ message: "need id" });
@@ -59,8 +58,7 @@ exports.signupPage = function (req, res) {
 
 exports.doSignup = async function (req, res) {
     if (!req.body) return;
-    let id = req.body.id;
-    let password = req.body.password;
+    const { id, password } = req.body;
 
     if (!id) {
         res.status(400).send({ message: "need id" });
