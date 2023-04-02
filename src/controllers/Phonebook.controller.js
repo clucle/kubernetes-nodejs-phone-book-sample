@@ -46,9 +46,7 @@ exports.createOne = async function (req, res) {
             return;
         }
 
-        console.log("success..?");
-        console.log(phonebook);
-        res.status(200).send({ message: "success..?" });
+        res.status(200).send({ message: phonebook });
     });
 }
 

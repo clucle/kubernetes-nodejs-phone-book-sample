@@ -1,1 +1,3 @@
-docker run -d -p 8080:8000 clucle/hello
+docker build -t clucle/web .
+docker push clucle/web
+kubectl rollout restart -n staging deployment clucle

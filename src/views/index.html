@@ -40,21 +40,13 @@
 
                             <th scope="col">이름</th>
                             <th scope="col">전화 번호</th>
+                            <th scope="col">이메일</th>
                             <th scope="col">메모</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="bs-checkbox" style="text-align: center; vertical-align: middle; width: 36px;">
-                                <label class="justify-content-center align-items-center m-0">
-                                    <input data-index="0" name="btSelectItem" type="checkbox" value="0">
-                                    <span></span>
-                                </label>
-                            </td>
-                            <th scope="row">1</th>
-                            <td>name</td>
-                            <td>010..</td>
-                            <td>memo..</td>
+
                         </tr>
                     </tbody>
                 </table>
@@ -64,12 +56,31 @@
 
 
     <script>
+        function createPhonebookTableRow(id, name, phone, email, memo) {
+            `<td class="bs-checkbox" style="text-align: center; vertical-align: middle; width: 36px;">
+                <label class="justify-content-center align-items-center m-0">
+                    <input data-index="0" name="btSelectItem" type="checkbox" value="0">
+                    <span></span>
+                </label>
+            </td>
+            <th scope="row">1</th>
+            <td>${name}</td>
+            <td>${phone}</td>
+            <td>${email}</td>
+            <td>${memo}</td>`
+        }
+
         function getAll() {
             $.ajax({
                 url: "/phonebook",
                 type: 'GET',
                 success: function (res) {
-                    console.log(res);
+                    var obj = JSON.parse(res);
+                    for (var key in obj) {
+                        if (obj.hasOwnProperty(key)) {     
+                            console.log(key, obj[key]);
+                        }
+                    }
                 },
                 error: function (xhr, status) {
                     var errorResponse = $.parseJSON(xhr.responseText);
