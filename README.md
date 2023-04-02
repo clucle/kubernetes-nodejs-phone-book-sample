@@ -42,3 +42,8 @@ kubectl port-forward svc/mongodb-headless 27017:27017 -n database
 # 서버 실행
 node server
 ```
+
+## server 외부 포트 열기
+```bash
+kubectl port-forward svc/clucle 4000:4000 -n staging
+```

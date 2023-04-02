@@ -31,8 +31,6 @@ exports.createOne = async function (req, res) {
         return;
     }
 
-    console.log("/?");
-
     let phonebook = new Phonebook({
         _id: new mongoose.Types.ObjectId(),
         uid: req.session.user,
@@ -43,15 +41,14 @@ exports.createOne = async function (req, res) {
     });
 
     phonebook.save(function (err, phonebook) {
-        console.log(err);
         if (err) {
             res.status(400).send({ message: err });
             return;
         }
 
-        console.log("??");
+        console.log("success..?");
         console.log(phonebook);
-        res.status(200).end();
+        res.status(200).send({ message: "success..?" });
     });
 }
 

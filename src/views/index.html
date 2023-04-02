@@ -93,8 +93,8 @@
                     console.log(res);
                 },
                 error: function (xhr, status) {
-                    alert("?");
-                    window.location = "/";
+                    var errorResponse = $.parseJSON(xhr.responseText);
+                    alert(errorResponse.message);
                 }
             });
         }
