@@ -44,10 +44,8 @@
                             <th scope="col">메모</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
+                    <tbody id="phonebook-table">
 
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -56,18 +54,21 @@
 
 
     <script>
-        function createPhonebookTableRow(id, name, phone, email, memo) {
-            `<td class="bs-checkbox" style="text-align: center; vertical-align: middle; width: 36px;">
-                <label class="justify-content-center align-items-center m-0">
-                    <input data-index="0" name="btSelectItem" type="checkbox" value="0">
-                    <span></span>
-                </label>
-            </td>
-            <th scope="row">1</th>
-            <td>${name}</td>
-            <td>${phone}</td>
-            <td>${email}</td>
-            <td>${memo}</td>`
+        function createPhonebookTableRow(phonebook) {
+            let ret = `<tr>
+                <td class="bs-checkbox" style="text-align: center; vertical-align: middle; width: 36px;">
+                    <label class="justify-content-center align-items-center m-0">
+                        <input data-index="0" name="btSelectItem" type="checkbox" value="0">
+                        <span></span>
+                    </label>
+                </td>
+                <th scope="row">1</th>
+                <td>${phonebook.name}</td>
+                <td>${phonebook.phone}</td>
+                <td>${phonebook.email}</td>
+                <td>${phonebook.memo}</td>
+            </tr>`
+            return ret;
         }
 
         function getAll() {
@@ -75,12 +76,15 @@
                 url: "/phonebook",
                 type: 'GET',
                 success: function (res) {
-                    var obj = JSON.parse(res);
+                    const obj = JSON.parse(res);
+                    let rows = "";
                     for (var key in obj) {
-                        if (obj.hasOwnProperty(key)) {     
-                            console.log(key, obj[key]);
+                        if (obj.hasOwnProperty(key)) {
+                            rows += createPhonebookTableRow(obj[key]);
                         }
                     }
+
+                    $("#phonebook-table").html(rows);
                 },
                 error: function (xhr, status) {
                     var errorResponse = $.parseJSON(xhr.responseText);
