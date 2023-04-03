@@ -33,7 +33,7 @@
         <div class="row justify-content-center align-items-center p-3">
             <div class="col col-sm-8 col-md-8 col-lg-8 col-xl-8" style="text-align: right">
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-add">Add</button>
-                <button type="button" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-danger" onclick="bulkDeleteButtonClicked()">Delete</button>
             </div>
         </div>
         <div class="row justify-content-center align-items-center">
@@ -164,7 +164,7 @@
             let ret = `<tr id=phonebook-${phonebook._id}>
                 <td class="bs-checkbox" style="text-align: center; vertical-align: middle; width: 36px;">
                     <label class="justify-content-center align-items-center m-0">
-                        <input data-index="0" name="btSelectItem" type="checkbox" value="0">
+                        <input data-index="0" name="btSelectItem" type="checkbox" value="${phonebook._id}">
                         <span></span>
                     </label>
                 </td>
@@ -282,6 +282,27 @@
                     const row = createPhonebookTableRow(res.message);
                     $("#phonebook-" + res.message._id).replaceWith(row);
                     $("#modal-modify").modal("hide");
+                },
+                error: function (xhr, status) {
+                    var errorResponse = $.parseJSON(xhr.responseText);
+                    alert(errorResponse.message);
+                }
+            });
+        }
+
+        function bulkDeleteButtonClicked() {
+            const checkboxes = document.querySelectorAll('input[name=btSelectItem]:checked');
+            const idArray = [...checkboxes].map(item => item.value);
+
+            $.ajax({
+                url: "/phonebook/bulk-delete",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    idArray: JSON.stringify(idArray)
+                },
+                success: function (res) {
+                    console.log(res);
                 },
                 error: function (xhr, status) {
                     var errorResponse = $.parseJSON(xhr.responseText);

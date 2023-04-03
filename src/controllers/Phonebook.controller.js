@@ -12,12 +12,6 @@ exports.getAll = async function (req, res) {
     res.end(JSON.stringify(Object.assign({}, phonebooks)));
 }
 
-exports.getOne = function (req, res) {
-    console.log("getOne");
-    const { id } = req.params;
-    console.log(id);
-}
-
 exports.createOne = async function (req, res) {
     if (!req.session && !req.session.user) {
         res.status(400).end();
@@ -50,7 +44,10 @@ exports.createOne = async function (req, res) {
 }
 
 exports.updateOne = async function (req, res) {
-    if (!req.body) return;
+    if (!req.body) {
+        res.status(400).end();
+        return;
+    }
 
     const { id } = req.params;
     const { name, phone, email, memo } = req.body;
@@ -69,9 +66,8 @@ exports.updateOne = async function (req, res) {
         {
             new: true
         });
-    
-    if ( phonebook === null)
-    {
+
+    if (phonebook === null) {
         res.status(400).end();
         return;
     }
@@ -84,4 +80,20 @@ exports.deleteOne = async function (req, res) {
     await Phonebook.findOneAndDelete({ uid: req.session.user, _id: mongoose.Types.ObjectId(id) });
 
     res.status(200).send({ message: id });
+}
+
+exports.bulkDelete = function (req, res) {
+    if (!req.body) {
+        res.status(400).end();
+        return;
+    }
+
+    if (!req.body.idArray || req.body.idArray.length == 0) {
+        res.status(400).send({ message: "empty id array" });
+        return;
+    }
+
+    // 여기서 지우자
+
+    res.status(200).send({ message: req.body.idArray });
 }
