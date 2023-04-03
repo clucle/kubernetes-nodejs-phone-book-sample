@@ -49,13 +49,34 @@ exports.createOne = async function (req, res) {
     });
 }
 
-exports.updateOne = function (req, res) {
+exports.updateOne = async function (req, res) {
     if (!req.body) return;
-    
+
     const { id } = req.params;
     const { name, phone, email, memo } = req.body;
 
-    res.status(200).send({ message: id });
+    let phonebook = await Phonebook.findOneAndUpdate(
+        {
+            uid: req.session.user,
+            _id: mongoose.Types.ObjectId(id)
+        },
+        {
+            name: name,
+            phone: phone,
+            email: email,
+            memo: memo
+        },
+        {
+            new: true
+        });
+    
+    if ( phonebook === null)
+    {
+        res.status(400).end();
+        return;
+    }
+
+    res.status(200).send({ message: phonebook });
 }
 
 exports.deleteOne = async function (req, res) {
