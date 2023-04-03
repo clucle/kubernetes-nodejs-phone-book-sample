@@ -220,7 +220,8 @@
                 },
                 error: function (xhr, status) {
                     var errorResponse = $.parseJSON(xhr.responseText);
-                    alert(errorResponse.message);
+                    console.log(errorResponse);
+                    alert(errorResponse.message.message);
                 }
             });
         }
@@ -302,7 +303,10 @@
                     idArray: JSON.stringify(idArray)
                 },
                 success: function (res) {
-                    console.log(res);
+                    const idArray = res.message;
+                    idArray.forEach(id => {
+                        $("#phonebook-" + id).remove();
+                    });
                 },
                 error: function (xhr, status) {
                     var errorResponse = $.parseJSON(xhr.responseText);

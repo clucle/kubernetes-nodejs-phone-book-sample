@@ -82,7 +82,7 @@ exports.deleteOne = async function (req, res) {
     res.status(200).send({ message: id });
 }
 
-exports.bulkDelete = function (req, res) {
+exports.bulkDelete = async function (req, res) {
     if (!req.body) {
         res.status(400).end();
         return;
@@ -93,7 +93,8 @@ exports.bulkDelete = function (req, res) {
         return;
     }
 
-    // 여기서 지우자
+    const idArray = JSON.parse(req.body.idArray).map(x => mongoose.Types.ObjectId(x));
+    await Phonebook.deleteMany({ _id: { $in: idArray } });
 
-    res.status(200).send({ message: req.body.idArray });
+    res.status(200).send({ message: idArray });
 }
