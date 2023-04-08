@@ -45,7 +45,7 @@
                                 rowspan="2" data-field="state">
                                 <div class="th-inner">
                                     <label class="m-0">
-                                        <input name="btSelectAll" type="checkbox">
+                                        <input name="btSelectAll" type="checkbox" onClick="toggleCheckbox(this)">
                                         <span></span>
                                     </label>
                                 </div>
@@ -313,6 +313,14 @@
                     alert(errorResponse.message);
                 }
             });
+        }
+
+        function toggleCheckbox(source)
+        {
+            const checkboxes = $('input[name="btSelectItem"]')
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = source.checked;
+            }
         }
 
         function init() {
