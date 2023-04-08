@@ -32,6 +32,8 @@
         </div>
         <div class="row justify-content-center align-items-center p-3">
             <div class="col col-sm-8 col-md-8 col-lg-8 col-xl-8" style="text-align: right">
+                <input type="text" style="display: inline-block; width: auto; height: auto;" class="form-control"
+                    id="input-search" placeholder="search..">
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-add">Add</button>
                 <button type="button" class="btn btn-danger" onclick="bulkDeleteButtonClicked()">Delete</button>
             </div>
@@ -161,7 +163,7 @@
 
     <script>
         function createPhonebookTableRow(phonebook) {
-            let ret = `<tr id=phonebook-${phonebook._id}>
+            let ret = `<tr id=phonebook-${phonebook._id} name="phonebook-row">
                 <td class="bs-checkbox" style="text-align: center; vertical-align: middle; width: 36px;">
                     <label class="justify-content-center align-items-center m-0">
                         <input data-index="0" name="btSelectItem" type="checkbox" value="${phonebook._id}">
@@ -187,7 +189,7 @@
                 success: function (res) {
                     const obj = JSON.parse(res);
                     let rows = "";
-                    for (var key in obj) {
+                    for (let key in obj) {
                         if (obj.hasOwnProperty(key)) {
                             rows += createPhonebookTableRow(obj[key]);
                         }
@@ -196,7 +198,7 @@
                     $("#phonebook-table").html(rows);
                 },
                 error: function (xhr, status) {
-                    var errorResponse = $.parseJSON(xhr.responseText);
+                    let errorResponse = $.parseJSON(xhr.responseText);
                     alert(errorResponse.message);
                 }
             });
@@ -219,7 +221,7 @@
                     $("#modal-add").modal("hide");
                 },
                 error: function (xhr, status) {
-                    var errorResponse = $.parseJSON(xhr.responseText);
+                    let errorResponse = $.parseJSON(xhr.responseText);
                     console.log(errorResponse);
                     alert(errorResponse.message.message);
                 }
@@ -244,7 +246,7 @@
                     $("#phonebook-" + id).remove();
                 },
                 error: function (xhr, status) {
-                    var errorResponse = $.parseJSON(xhr.responseText);
+                    let errorResponse = $.parseJSON(xhr.responseText);
                     alert(errorResponse.message);
                 }
             });
@@ -285,7 +287,7 @@
                     $("#modal-modify").modal("hide");
                 },
                 error: function (xhr, status) {
-                    var errorResponse = $.parseJSON(xhr.responseText);
+                    let errorResponse = $.parseJSON(xhr.responseText);
                     alert(errorResponse.message);
                 }
             });
@@ -309,16 +311,15 @@
                     });
                 },
                 error: function (xhr, status) {
-                    var errorResponse = $.parseJSON(xhr.responseText);
+                    let errorResponse = $.parseJSON(xhr.responseText);
                     alert(errorResponse.message);
                 }
             });
         }
 
-        function toggleCheckbox(source)
-        {
+        function toggleCheckbox(source) {
             const checkboxes = $('input[name="btSelectItem"]')
-            for (var i = 0; i < checkboxes.length; i++) {
+            for (let i = 0; i < checkboxes.length; i++) {
                 checkboxes[i].checked = source.checked;
             }
         }
@@ -330,6 +331,34 @@
                     $('#phonebook-add-phone').val("");
                     $('#phonebook-add-email').val("");
                     $('#phonebook-add-memo').val("");
+                });
+
+                $("#input-search").on("input", function () {
+                    const value = $(this).val();
+
+                    if (typeof value !== 'string' || value === "") {
+                        $('tr[name="phonebook-row"]').each(function (index, row) {
+                            $(row).removeClass('d-none');
+                        });
+                    }
+                    else {
+                        $('tr[name="phonebook-row"]').each(function (index, row) {
+                            const tr = $(row);
+                            const td = tr.children();
+
+                            let searched = false;
+                            for (let i = 1; i <= 4; i++) {
+                                let text = td.eq(i).text();
+                                if (text.includes(value)) {
+                                    searched = true;
+                                    break;
+                                }
+                            }
+
+                            if (searched) tr.removeClass('d-none');
+                            else tr.addClass('d-none');
+                        });
+                    }
                 });
             });
 
